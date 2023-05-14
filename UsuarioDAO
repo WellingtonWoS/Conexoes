@@ -1,0 +1,37 @@
+
+package DAO;
+
+import DTO.UsuarioDTO;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import javax.swing.JOptionPane;
+
+public class UsuarioDAO {
+    
+    Connection conn;
+    
+    public ResultSet autenticacaoUsuario(UsuarioDTO objusuariodto){
+        
+        conn = new ConexaoDAO().conectaBD(); //Declaração de variável para conectar ao ConexãoDAO
+        
+        try{
+            
+            String sql = "select * from usuario where nome_usuario = ? and senha_usuario = ? "; //Declaração para encontrar no banco de dados o login e senha
+            PreparedStatement pstm = conn.prepareStatement(sql);                        //Nessa etapa, função para encontrar os dados do parâmetro sql
+            
+            pstm.setString(1, objusuariodto.getNome_usuario());    //Essa etapa é para informar o que será alocardo na interrogação 1º 
+            pstm.setString(2, objusuariodto.getSenha_usuario());    //Essa etapa é para informar o que será alocardo na interrogação 2º
+            
+            ResultSet rs = pstm.executeQuery();   //Execução da query da função pstm
+            return rs;                            //Resultado da execução pstm, no caso a variável rs
+            
+        } catch(SQLException erro){
+            JOptionPane.showMessageDialog(null, "UsuarioDAO: " + erro);
+            return null;
+        }
+        
+    }
+    
+}
